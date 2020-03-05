@@ -12,3 +12,5 @@ app = QApplication([])
 window = MainWindow(experiment)
 window.show()
 app.exec()
+
+experiment.finalize()

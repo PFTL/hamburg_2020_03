@@ -1,6 +1,9 @@
 import os
 import threading
+import pyqtgraph as pg
+
 from PyQt5 import uic
+from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow
 
 
@@ -13,12 +16,22 @@ class MainWindow(QMainWindow):
 
         self.experiment = experiment
 
-        self.start_button.clicked.connect(self.start_pressed)
+        self.plot_widget = pg.PlotWidget()
+        self.plot = self.plot_widget.plot([0], [0])
+        layout = self.centralwidget.layout()
+        layout.addWidget(self.plot_widget)
 
-    def start_pressed(self):
-        print('Button pressed')
-        t = threading.Thread(target=self.experiment.start_scan)
-        t.start()
+        self.start_button.clicked.connect(self.experiment.start_scan)
+        self.stop_button.clicked.connect(self.experiment.stop_scan)
+
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update_plot)
+        self.timer.start(30)
+
+    def update_plot(self):
+        self.plot.setData(self.experiment.scan_range, self.experiment.scan_data)
+
+
 
 
 if __name__ == "__main__":
