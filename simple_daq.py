@@ -19,11 +19,11 @@ class Device:
     def idn(self):
         return self.query('IDN')
 
-    def set_output(self, channel, output_value):
+    def set_analog_output(self, channel, output_value):
         message = 'OUT:CH{}:{}'.format(channel, output_value)
         self.query(message)
 
-    def read_input(self, channel):
+    def get_analog_input(self, channel):
         message = 'IN:CH{}'.format(channel)
         ans = self.query(message)
         ans = int(ans)
