@@ -1,0 +1,20 @@
+user:
+  name: Aquiles
+
+daq:
+  port: /dev/ttyACM0  # This can be COM3, etc.
+  model: AnalogDaq
+
+scan:
+  channel_in: 0
+  channel_out: 0
+  start: 0V
+  stop: 3.3V
+  step: 100mV
+  resistance: 220ohm
+
+data:
+  folder: /home/aquiles/Data
+  filename: scan_data
+
+

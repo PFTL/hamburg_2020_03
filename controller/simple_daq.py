@@ -20,6 +20,11 @@ class Device:
         return self.query('IDN')
 
     def set_analog_output(self, channel, output_value):
+        if channel not in (0, 1):
+            raise Exception('Channel must be 0 or 1')
+        if output_value > 4095:
+            raise Exception('Output value must be <4095')
+
         message = 'OUT:CH{}:{}'.format(channel, output_value)
         self.query(message)
 
@@ -29,6 +34,8 @@ class Device:
         ans = int(ans)
         return ans
 
+    def close(self):
+        self.rsc.close()
 
 if __name__ == '__main__':
     dev = Device('/dev/ttyACM0')
