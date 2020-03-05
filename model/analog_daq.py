@@ -1,7 +1,6 @@
 from controller.simple_daq import Device
-import pint
 
-ur = pint.UnitRegistry()
+from model import ur
 
 class AnalogDaq:
     def __init__(self, port):
