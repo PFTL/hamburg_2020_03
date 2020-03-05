@@ -39,8 +39,8 @@ if __name__ == '__main__':
 
     for v in voltages:
         v_bits = int(v/3300*4095)
-        dev.set_output(0, v_bits)
-        ans = dev.read_input(0)
+        dev.set_analog_output(0, v_bits)
+        ans = dev.get_analog_input(0)
         ans = ans*3.3/1023
         print(ans/220)
         currents.append(ans/220)
