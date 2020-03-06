@@ -2,7 +2,7 @@ user:
   name: Aquiles
 
 daq:
-  port: /dev/ttyACM1  # This can be COM3, etc.
+  port: /dev/ttyACM0  # This can be COM3, etc.
   model: AnalogDaq
 
 scan:
@@ -14,7 +14,8 @@ scan:
   resistance: 220ohm
 
 data:
-  folder: /home/aquiles/Data/hamburg/scan_data/test1
-  filename: scan_data
+  folder: /home/aquiles/Data/hamburg/
+  filename: scan_data_
+  metadata_filename: metadata_scan_
 
 
