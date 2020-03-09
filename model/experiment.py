@@ -14,6 +14,7 @@ class Experiment:
     def __init__(self):
         self.scan_range = np.zeros(1)
         self.scan_data = np.zeros(1)
+        self.monitor_data = np.zeros(1)
         self.config = {}
         self.is_running = False
 
@@ -50,6 +51,27 @@ class Experiment:
     def start_scan(self):
         t = threading.Thread(target=self.do_scan)
         t.start()
+
+    def monitor_signal(self):
+        if self.is_running:
+            return
+        self.monitor_data = np.zeros(self.config['monitor']['num_steps'])
+        self.keep_monitor_running = True
+        self.is_running = True
+        while self.keep_monitor_running:
+            measured_voltage = self.daq.get_voltage(self.config['monitor']['channel_in'])
+            self.monitor_data = np.roll(self.monitor_data, -1)
+            self.monitor_data[-1] = measured_voltage.m_as('mV')
+            sleep_time = ur(self.config['monitor']['time_step'])
+            time.sleep(sleep_time.m_as('s'))
+        self.is_running = False
+
+    def start_monitor(self):
+        t = threading.Thread(target=self.monitor_signal)
+        t.start()
+
+    def stop_monitor(self):
+        self.keep_monitor_running = False
 
     def stop_scan(self):
         self.keep_running = False
@@ -104,6 +126,7 @@ class Experiment:
     def finalize(self):
         print('Finalizing Experiment')
         self.keep_running = False
+        self.keep_monitor_running = False
         while self.is_running:
             time.sleep(0.1)
         self.daq.finalize()

@@ -106,7 +106,14 @@
     </property>
     <addaction name="actionSave"/>
    </widget>
+   <widget class="QMenu" name="menuMonitor">
+    <property name="title">
+     <string>Monitor</string>
+    </property>
+    <addaction name="actionShow_Monitor"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuMonitor"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionSave">
@@ -115,6 +122,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionShow_Monitor">
+   <property name="text">
+    <string>Show Monitor</string>
    </property>
   </action>
  </widget>

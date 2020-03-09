@@ -1,5 +1,4 @@
 import os
-import threading
 import pyqtgraph as pg
 
 from PyQt5 import uic
@@ -7,6 +6,7 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow
 
 from model import ur
+from view.monitor import MonitorWindow
 
 
 class MainWindow(QMainWindow):
@@ -17,6 +17,9 @@ class MainWindow(QMainWindow):
         uic.loadUi(ui_file, self)
 
         self.experiment = experiment
+
+        self.monitor_window = MonitorWindow(experiment)
+        self.actionShow_Monitor.triggered.connect(self.monitor_window.show)
 
         self.plot_widget = pg.PlotWidget()
         self.plot = self.plot_widget.plot([0], [0])
@@ -29,13 +32,26 @@ class MainWindow(QMainWindow):
         self.actionSave.triggered.connect(self.experiment.save)
 
         self.start_line.setText(self.experiment.config['scan']['start'])
+        self.start_line.editingFinished.connect(self.check_start)
         self.stop_line.setText(self.experiment.config['scan']['stop'])
         self.num_steps_line.setText(str(self.experiment.config['scan']['num_steps']))
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_plot)
-        self.timer.timeout.connect(self.update_gui)
+        # self.timer.timeout.connect(self.update_gui)
         self.timer.start(30)
+
+    def check_start(self):
+        start = self.start_line.text()
+        try:
+            if ur(start) > ur('3.3V') or ur(start) < ur('0V'):
+                print(f'Start can\'t be {start}')
+                self.start_button.setEnabled(False)
+            else:
+                self.start_button.setEnabled(True)
+        except Exception as e:
+            print(e)
+            self.start_button.setEnabled(False)
 
     def update_gui(self):
         start = self.start_line.text()

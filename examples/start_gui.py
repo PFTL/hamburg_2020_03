@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QApplication
 
 from model.experiment import Experiment
 from view.main_window import MainWindow
-
+# from view.monitor import MonitorWindow as MainWindow
 
 experiment = Experiment()
 experiment.load_config('experiment.yml')
